@@ -1,4 +1,4 @@
-const apikey = '98ba959294b91c68a47267449977f5f6';
+const apikey = '27b38cba679d4079d0e3a81989eea5e5';
 
 let input = document.querySelector('#search')
 const btn = document.querySelector('.search-btn')
@@ -8,17 +8,22 @@ const ListElement = document.querySelector('#autocompleteList')
 let Locations = [];
 
 async function fecthList() {
+    console.log("fetching..")
     input.value = "";
-
-    await fetch('https://restcountries.com/v3.1/all')
+try{
+    
+    const res = await fetch('https://restcountries.com/v2/all?fields=name')
         .then((res) => res.json())
         .then((data) => {
             Locations = data.map((country) => {
-                return country.name.common
+                return country.name
             })
             Locations.sort();
             loaddata(Locations, ListElement);
         })
+}catch(err){
+    console.log(err)
+}
 }
 
 function loaddata(data, ListElement) {
@@ -37,7 +42,13 @@ ListElement.addEventListener('click', (event) => {
     ListElement.innerHTML = "";
 })
 
-input.addEventListener('focusin', fecthList);
+input.addEventListener(/* The `'focusin', fecthList` is an event listener that listens for the
+`focusin` event on the input element. When the input element receives focus
+(i.e., when the user clicks on it or tabs into it), the `fecthList` function
+is called. In this case, `fecthList` is responsible for fetching a list of
+countries from an API and populating the autocomplete list with the fetched
+data. */
+'focusin', fecthList);
 
 function filterdata(data, searchText) {
     return data.filter((location) =>
